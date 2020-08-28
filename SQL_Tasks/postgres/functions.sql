@@ -27,5 +27,5 @@ END;
 $$ ;
 
 
--- SELECT & VERIFY FUNCTION
+-- SELECT & VERIFY THE FUNCTION
 SELECT * FROM get_data_table();

@@ -9,6 +9,11 @@ CREATE TABLE employee
     salary NUMERIC
 );
 
+--CREATE TABLE AUDIT
+CREATE TABLE audit
+(
+    emp_id char(9), NOT NULL, entry_data TEXT NOT NULL
+);
 
 -- CREATE FUNCTION
 CREATE OR REPLACE FUNCTION auditlogfunc()

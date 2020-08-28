@@ -1,4 +1,6 @@
+--------------------------------------------
 ---- STORED PROCEDURE TO INSERT A QUERY ----
+--------------------------------------------
 
 -- CREATE TABLE & SELECT QUERY
 CREATE TABLE public.test_proc
@@ -34,8 +36,9 @@ SELECT * FROM test_proc;
 
 
 
-
+----------------------------------------------------------
 ---- STORED PROCEDURE TO INSERT A QUERY IN TWO TABLES ----
+----------------------------------------------------------
 
 -- CREATE TWO TABLES WITH JUST ONE COLUMN IN EACH & SELECT QUERY FOR BOTH
 CREATE TABLE tbl1 (id INTEGER);
@@ -66,8 +69,9 @@ SELECT * FROM tbl2;
 
 
 
-
+-----------------------------------------------------------
 ---- STORED PROCEDURE TO PERFORM ARITHMETIC OPERATIONS ----
+-----------------------------------------------------------
 
 -- CREATE PROCEDURE
 CREATE OR REPLACE PROCEDURE public.test_proc
@@ -77,20 +81,20 @@ CREATE OR REPLACE PROCEDURE public.test_proc
 LANGUAGE 'plpgsql'
 AS $$
 DECLARE
-sum NUMERIC;
-mult NUMERIC;
-div NUMERIC;
+n_sum NUMERIC;
+n_mult NUMERIC;
+n_div NUMERIC;
 BEGIN
-        sum := num1 + num2;
-        mult := num1 * num2;
+        n_sum := num1 + num2;
+        n_mult := num1 * num2;
         BEGIN       -- EXCEPTION HANDLING FOR ZERO DIVISION ERROR
-            div := num1 / num2;
+            n_div := num1 / num2;
             EXCEPTION WHEN OTHERS THEN
-            div := 0; 
+            n_div := 0; 
         END;
-        RAISE NOTICE 'The Sum is : %', sum;
-        RAISE NOTICE 'The Multiplication is : %', mult;
-        RAISE NOTICE 'The Division is : %', div;
+        RAISE NOTICE 'The Sum is : %', n_sum;
+        RAISE NOTICE 'The Multiplication is : %', n_mult;
+        RAISE NOTICE 'The Division is : %', n_div;
 END;
 $$ ;
 
@@ -101,3 +105,64 @@ CALL test_proc (10, 5);
 
 -- CALLING THE ABOVE PROCEDURE TO CHECK EXC. HANDLING - ZERO ERROR
 CALL test_proc (2, 0);
+
+
+
+
+----------------------------------------------------
+---- STORED PROCEDURE TO DISPLAY A TEXT/MESSAGE ----
+----------------------------------------------------
+
+-- CREATE PROCEDURE
+CREATE PROCEDURE proc_displayText (msg INOUT TEXT)
+LANGUAGE 'plpgsql'
+AS $$
+BEGIN
+    RAISE NOTICE '%', msg;
+END;
+$$ ;
+
+-- CALL PROCEDURE
+CALL proc_displayText ('Hello')
+
+CALL proc_displayText('Welcome')
+
+
+
+
+--------------------------------------------------------------------------------------------------
+---- STORED PROCEDURE TO PERFORM ARITHMETIC OPERATIONS USING 'IN' & 'INOUT' WITHOUT 'DECLARE' ----
+--------------------------------------------------------------------------------------------------
+
+-- CREATE PROCEDURE
+CREATE OR REPLACE PROCEDURE public.test_proc
+(
+    n_num1 IN NUMERIC, n_num2 IN NUMERIC, n_sum INOUT NUMERIC, n_mult INOUT NUMERIC, n_div INOUT NUMERIC
+)
+LANGUAGE 'plpgsql'
+AS $$
+BEGIN
+        n_sum := n_num1 + n_num2;
+        n_mult := n_num1 * n_num2;
+        BEGIN       -- EXCEPTION HANDLING FOR ZERO DIVISION ERROR
+            n_div := n_num1 / n_num2;
+            EXCEPTION WHEN OTHERS THEN
+            n_div := 0; 
+        END;
+        RAISE NOTICE 'The Sum is : %', n_sum;
+        RAISE NOTICE 'The Multiplication is : %', n_mult;
+        RAISE NOTICE 'The Division is : %', n_div;
+END;
+$$ ;
+
+
+-- CALL THE PROCEDURE TO PERFORM THE ARITHMETIC OPERATION
+CALL test_proc (10, 5, NULL ,NULL, NULL);
+
+
+-- CALLING THE ABOVE PROCEDURE TO CHECK EXC. HANDLING - ZERO ERROR
+CALL test_proc (2, 0, NULL ,NULL, NULL);
+
+
+
+
