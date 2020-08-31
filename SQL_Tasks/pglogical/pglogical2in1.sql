@@ -3,7 +3,7 @@
 -----------------------------------------------------------------
 
 
--- PROVIDER1 (Port-8888)
+-- PROVIDER1 (Port-8888 DB-provider1)
 
 CREATE EXTENSION pglogical;
 
@@ -22,7 +22,7 @@ SELECT pglogical.replication_set_add_table (
 
 
 
--- PROVIDER2 (Port-8888)
+-- PROVIDER2 (Port-8888 DB-provider2)
 
 CREATE EXTENSION pglogical;
 
@@ -41,7 +41,7 @@ SELECT pglogical.replication_set_add_table (
 
 
 
--- SUBSCRIBER (Port-6666)
+-- SUBSCRIBER (Port-6666 DB-subscriber)
 
 CREATE EXTENSION pglogical;
 
@@ -63,18 +63,42 @@ SELECT pglogical.create_subscription (
 
 
 
--- PROVIDER1 (Port-8888)
+-- PROVIDER1 (Port-8888 DB-provider1)
 
 insert into tbl select nextval ('seq_tbl_id'),'user' || generate_series(1,10,2);
 
 
 
--- PROVIDER2 (Port-8888)
+-- PROVIDER2 (Port-8888 DB-provider2)
 
 insert into tbl select nextval ('seq_tbl_id'),'user' || generate_series(1,10,2);
 
 
 
--- SUBSCRIBER (Port-6666)
+-- SUBSCRIBER (Port-6666 DB-subscriber)
 
 SELECT * FROM tbl ;
+
+INSERT INTO tbl VALUES (11, 'user11');
+
+SELECT * FROM tbl ;
+
+
+
+-- PROVIDER1 (Port-8888 DB-provider1)
+
+SELECT * FROM tbl ;
+
+
+
+-- PROVIDER2 (Port-8888 DB-provider2)
+
+SELECT * FROM tbl ;
+
+
+-------------------------------------------------------------------------------------------
+-- #NOTE: THE VALUES INSERTED THROUGH PROVIDER(S) CAN BE REPLICATED TO SUBSCRIBER        --
+--        BUT, THE VALUES INSERTED THROUGH SUBSCRIBER ARE NOT REPLICATED TO PROVIDER(S)  --
+--                                                                                       --
+--        HENCE, IT'S UNIDIRECTIONAL NOT BIDIRECTIONAL                                   --
+-------------------------------------------------------------------------------------------
