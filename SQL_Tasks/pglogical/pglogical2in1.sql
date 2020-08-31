@@ -96,6 +96,7 @@ SELECT * FROM tbl ;
 SELECT * FROM tbl ;
 
 
+
 -------------------------------------------------------------------------------------------
 -- #NOTE: THE VALUES INSERTED THROUGH PROVIDER(S) CAN BE REPLICATED TO SUBSCRIBER        --
 --        BUT, THE VALUES INSERTED THROUGH SUBSCRIBER ARE NOT REPLICATED TO PROVIDER(S)  --
